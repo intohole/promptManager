@@ -3,3 +3,4 @@ from .version import Version, VersionCreate, VersionDiff
 from .token import Token, TokenCreate, TokenUpdate
 from .llm import LLMGenerateRequest, LLMGenerateResponse, EmbeddingRequest, EmbeddingResponse
 from .llm_config import LLMConfig, LLMConfigCreate, LLMConfigUpdate
+from .embedding_config import EmbeddingConfig, EmbeddingConfigCreate, EmbeddingConfigUpdate

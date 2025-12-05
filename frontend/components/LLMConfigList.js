@@ -3,13 +3,9 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [modalType, setModalType] = React.useState('create'); // create, edit
     const [formData, setFormData] = React.useState({
+        name: '',
         token_id: '',
         model_name: '',
-        temperature: 0.1,
-        max_tokens: 2048,
-        top_p: 0.9,
-        presence_penalty: 0.0,
-        frequency_penalty: 0.0,
         params: {},
         is_active: true
     });
@@ -17,11 +13,20 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
     // 处理创建/编辑LLM配置
     const handleSubmit = async () => {
         try {
+            // 将表单数据转换为API所需格式
+            const submitData = {
+                name: formData.name,
+                token_id: formData.token_id,
+                model_name: formData.model_name,
+                params: formData.params,
+                is_active: formData.is_active
+            };
+            
             if (modalType === 'create') {
-                await API.LLMConfig.create(formData);
+                await API.LLMConfig.create(submitData);
                 alert('LLM配置创建成功');
             } else {
-                await API.LLMConfig.update(formData.id, formData);
+                await API.LLMConfig.update(formData.id, submitData);
                 alert('LLM配置更新成功');
             }
             setIsModalVisible(false);
@@ -37,13 +42,9 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
         setModalType('edit');
         setFormData({
             id: config.id,
+            name: config.name,
             token_id: config.token_id,
             model_name: config.model_name,
-            temperature: config.temperature,
-            max_tokens: config.max_tokens,
-            top_p: config.top_p,
-            presence_penalty: config.presence_penalty,
-            frequency_penalty: config.frequency_penalty,
             params: config.params || {},
             is_active: config.is_active
         });
@@ -68,13 +69,9 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
     const handleCreateConfig = () => {
         setModalType('create');
         setFormData({
+            name: '',
             token_id: '',
             model_name: '',
-            temperature: 0.1,
-            max_tokens: 2048,
-            top_p: 0.9,
-            presence_penalty: 0.0,
-            frequency_penalty: 0.0,
             params: {},
             is_active: true
         });
@@ -110,7 +107,7 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
                 ) : (
                     llmConfigs.map((config) => React.createElement('div', { key: config.id, className: 'llm-config-item' },
                         React.createElement('div', { className: 'llm-config-item-header' },
-                            React.createElement('h4', null, `${getTokenName(config.token_id)} - ${config.model_name}`),
+                            React.createElement('h4', null, `${config.name} (${getTokenName(config.token_id)} - ${config.model_name})`),
                             React.createElement('div', { className: 'llm-config-item-actions' },
                                 React.createElement('button', {
                                     className: 'btn btn-small',
@@ -128,24 +125,8 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
                                 React.createElement('span', { className: `llm-config-item-value ${config.is_active ? 'active' : 'inactive'}` }, config.is_active ? '活跃' : '禁用')
                             ),
                             React.createElement('div', { className: 'llm-config-item-row' },
-                                React.createElement('span', { className: 'llm-config-item-label' }, '温度:'),
-                                React.createElement('span', { className: 'llm-config-item-value' }, config.temperature)
-                            ),
-                            React.createElement('div', { className: 'llm-config-item-row' },
-                                React.createElement('span', { className: 'llm-config-item-label' }, '最大token数:'),
-                                React.createElement('span', { className: 'llm-config-item-value' }, config.max_tokens)
-                            ),
-                            React.createElement('div', { className: 'llm-config-item-row' },
-                                React.createElement('span', { className: 'llm-config-item-label' }, 'Top P:'),
-                                React.createElement('span', { className: 'llm-config-item-value' }, config.top_p)
-                            ),
-                            React.createElement('div', { className: 'llm-config-item-row' },
-                                React.createElement('span', { className: 'llm-config-item-label' }, '存在惩罚:'),
-                                React.createElement('span', { className: 'llm-config-item-value' }, config.presence_penalty)
-                            ),
-                            React.createElement('div', { className: 'llm-config-item-row' },
-                                React.createElement('span', { className: 'llm-config-item-label' }, '频率惩罚:'),
-                                React.createElement('span', { className: 'llm-config-item-value' }, config.frequency_penalty)
+                                React.createElement('span', { className: 'llm-config-item-label' }, '模型参数:'),
+                                React.createElement('pre', { className: 'llm-config-item-value' }, JSON.stringify(config.params, null, 2))
                             )
                         )
                     ))
@@ -181,6 +162,17 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
                             )
                         ),
                         React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', { htmlFor: 'llm-config-name' }, '配置名称*'),
+                            React.createElement('input', {
+                                type: 'text',
+                                id: 'llm-config-name',
+                                value: formData.name,
+                                onChange: (e) => setFormData({ ...formData, name: e.target.value }),
+                                placeholder: '例如：GPT-3.5-Turbo默认配置',
+                                className: 'form-input'
+                            })
+                        ),
+                        React.createElement('div', { className: 'form-group' },
                             React.createElement('label', { htmlFor: 'llm-config-model-name' }, '模型名称*'),
                             React.createElement('input', {
                                 type: 'text',
@@ -191,69 +183,104 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
                                 className: 'form-input'
                             })
                         ),
+                        // 可视化模型参数配置
                         React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'llm-config-temperature' }, '温度'),
-                            React.createElement('input', {
-                                type: 'number',
-                                id: 'llm-config-temperature',
-                                value: formData.temperature,
-                                onChange: (e) => setFormData({ ...formData, temperature: parseFloat(e.target.value) }),
-                                min: 0,
-                                max: 2,
-                                step: 0.1,
-                                className: 'form-input'
-                            })
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'llm-config-max-tokens' }, '最大Token数'),
-                            React.createElement('input', {
-                                type: 'number',
-                                id: 'llm-config-max-tokens',
-                                value: formData.max_tokens,
-                                onChange: (e) => setFormData({ ...formData, max_tokens: parseInt(e.target.value) }),
-                                min: 1,
-                                max: 32768,
-                                className: 'form-input'
-                            })
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'llm-config-top-p' }, 'Top P'),
-                            React.createElement('input', {
-                                type: 'number',
-                                id: 'llm-config-top-p',
-                                value: formData.top_p,
-                                onChange: (e) => setFormData({ ...formData, top_p: parseFloat(e.target.value) }),
-                                min: 0,
-                                max: 1,
-                                step: 0.1,
-                                className: 'form-input'
-                            })
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'llm-config-presence-penalty' }, '存在惩罚'),
-                            React.createElement('input', {
-                                type: 'number',
-                                id: 'llm-config-presence-penalty',
-                                value: formData.presence_penalty,
-                                onChange: (e) => setFormData({ ...formData, presence_penalty: parseFloat(e.target.value) }),
-                                min: -2,
-                                max: 2,
-                                step: 0.1,
-                                className: 'form-input'
-                            })
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'llm-config-frequency-penalty' }, '频率惩罚'),
-                            React.createElement('input', {
-                                type: 'number',
-                                id: 'llm-config-frequency-penalty',
-                                value: formData.frequency_penalty,
-                                onChange: (e) => setFormData({ ...formData, frequency_penalty: parseFloat(e.target.value) }),
-                                min: -2,
-                                max: 2,
-                                step: 0.1,
-                                className: 'form-input'
-                            })
+                            React.createElement('h4', null, '模型参数配置'),
+                            React.createElement('div', { className: 'param-group' },
+                                React.createElement('label', { htmlFor: 'llm-config-temperature' }, '温度'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    id: 'llm-config-temperature',
+                                    value: formData.params.temperature || 0.1,
+                                    onChange: (e) => setFormData({ 
+                                        ...formData, 
+                                        params: { 
+                                            ...formData.params, 
+                                            temperature: parseFloat(e.target.value) 
+                                        } 
+                                    }),
+                                    min: 0,
+                                    max: 2,
+                                    step: 0.1,
+                                    className: 'form-input'
+                                })
+                            ),
+                            React.createElement('div', { className: 'param-group' },
+                                React.createElement('label', { htmlFor: 'llm-config-max-tokens' }, '最大Token数'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    id: 'llm-config-max-tokens',
+                                    value: formData.params.max_tokens || 2048,
+                                    onChange: (e) => setFormData({ 
+                                        ...formData, 
+                                        params: { 
+                                            ...formData.params, 
+                                            max_tokens: parseInt(e.target.value) 
+                                        } 
+                                    }),
+                                    min: 1,
+                                    max: 32768,
+                                    step: 100,
+                                    className: 'form-input'
+                                })
+                            ),
+                            React.createElement('div', { className: 'param-group' },
+                                React.createElement('label', { htmlFor: 'llm-config-top-p' }, 'Top P'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    id: 'llm-config-top-p',
+                                    value: formData.params.top_p || 0.9,
+                                    onChange: (e) => setFormData({ 
+                                        ...formData, 
+                                        params: { 
+                                            ...formData.params, 
+                                            top_p: parseFloat(e.target.value) 
+                                        } 
+                                    }),
+                                    min: 0,
+                                    max: 1,
+                                    step: 0.1,
+                                    className: 'form-input'
+                                })
+                            ),
+                            React.createElement('div', { className: 'param-group' },
+                                React.createElement('label', { htmlFor: 'llm-config-presence-penalty' }, '存在惩罚'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    id: 'llm-config-presence-penalty',
+                                    value: formData.params.presence_penalty || 0.0,
+                                    onChange: (e) => setFormData({ 
+                                        ...formData, 
+                                        params: { 
+                                            ...formData.params, 
+                                            presence_penalty: parseFloat(e.target.value) 
+                                        } 
+                                    }),
+                                    min: -2,
+                                    max: 2,
+                                    step: 0.1,
+                                    className: 'form-input'
+                                })
+                            ),
+                            React.createElement('div', { className: 'param-group' },
+                                React.createElement('label', { htmlFor: 'llm-config-frequency-penalty' }, '频率惩罚'),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    id: 'llm-config-frequency-penalty',
+                                    value: formData.params.frequency_penalty || 0.0,
+                                    onChange: (e) => setFormData({ 
+                                        ...formData, 
+                                        params: { 
+                                            ...formData.params, 
+                                            frequency_penalty: parseFloat(e.target.value) 
+                                        } 
+                                    }),
+                                    min: -2,
+                                    max: 2,
+                                    step: 0.1,
+                                    className: 'form-input'
+                                })
+                            )
                         ),
                         React.createElement('div', { className: 'form-group' },
                             React.createElement('label', { htmlFor: 'llm-config-status' }, '状态'),

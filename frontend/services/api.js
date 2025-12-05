@@ -395,6 +395,74 @@ const LLMConfigAPI = {
     }
 };
 
+// Embedding配置相关API
+const EmbeddingConfigAPI = {
+    // 获取所有Embedding配置
+    getAll: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/embedding-configs/`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch Embedding configs:', error);
+            throw error;
+        }
+    },
+    
+    // 获取单个Embedding配置
+    getById: async (id) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/embedding-configs/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to fetch Embedding config ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // 获取指定token的Embedding配置
+    getByTokenId: async (tokenId) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/embedding-configs/token/${tokenId}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to fetch Embedding configs for token ${tokenId}:`, error);
+            throw error;
+        }
+    },
+    
+    // 创建Embedding配置
+    create: async (configData) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/embedding-configs/`, configData);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to create Embedding config:', error);
+            throw error;
+        }
+    },
+    
+    // 更新Embedding配置
+    update: async (id, configData) => {
+        try {
+            const response = await axios.put(`${API_BASE_URL}/embedding-configs/${id}`, configData);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to update Embedding config ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // 删除Embedding配置
+    delete: async (id) => {
+        try {
+            await axios.delete(`${API_BASE_URL}/embedding-configs/${id}`);
+        } catch (error) {
+            console.error(`Failed to delete Embedding config ${id}:`, error);
+            throw error;
+        }
+    }
+};
+
 // 导出所有API服务
 window.API = {
     Prompt: PromptAPI,
@@ -403,5 +471,6 @@ window.API = {
     Index: IndexAPI,
     LLM: LLMAPI,
     Config: ConfigAPI,
-    LLMConfig: LLMConfigAPI
+    LLMConfig: LLMConfigAPI,
+    EmbeddingConfig: EmbeddingConfigAPI
 };

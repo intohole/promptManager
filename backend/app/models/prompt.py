@@ -12,7 +12,6 @@ class Prompt(Base):
     content = Column(Text, nullable=False)
     category = Column(String, index=True, nullable=True)
     tags = Column(JSON, nullable=True)
-    model_params = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     

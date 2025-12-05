@@ -8,7 +8,6 @@ class PromptBase(BaseModel):
     content: str = Field(..., min_length=1)
     category: Optional[str] = Field(None, max_length=100)
     tags: Optional[List[str]] = None
-    model_params: Optional[Dict[str, Any]] = None
 
 class PromptCreate(PromptBase):
     pass
@@ -19,7 +18,6 @@ class PromptUpdate(BaseModel):
     content: Optional[str] = Field(None, min_length=1)
     category: Optional[str] = Field(None, max_length=100)
     tags: Optional[List[str]] = None
-    model_params: Optional[Dict[str, Any]] = None
 
 class Prompt(PromptBase):
     id: int

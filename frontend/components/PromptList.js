@@ -17,16 +17,14 @@ function PromptList({
         content: '',
         category: '',
         tags: [],
-        tagInput: '',
-        model_params: {}
+        tagInput: ''
     });
     
     // 处理创建Prompt
     const handleCreatePrompt = async () => {
         try {
             await API.Prompt.create({
-                ...formData,
-                model_params: formData.model_params || {}
+                ...formData
             });
             alert('Prompt创建成功');
             setIsCreateModalVisible(false);
@@ -72,8 +70,7 @@ function PromptList({
             content: prompt.content,
             category: prompt.category || '',
             tags: prompt.tags || [],
-            tagInput: '',
-            model_params: prompt.model_params || {}
+            tagInput: ''
         });
         setIsEditModalVisible(true);
     };
