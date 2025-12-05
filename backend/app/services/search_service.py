@@ -3,21 +3,29 @@ from typing import List, Dict, Any, Optional
 from chromadb.config import Settings
 from ..models import Prompt
 from ..database.config import get_db
+from .config_service import ConfigService
 
 class SearchService:
     def __init__(self):
-        # 连接到本地ChromaDB服务
+        # 初始化配置服务
+        self.config_service = ConfigService()
+        # 获取Chroma配置
+        chroma_config = self.config_service.get_chroma_config()
+        
+        # 连接到ChromaDB服务
         self.client = chromadb.HttpClient(
-            host='localhost',
-            port=8999,
+            host=chroma_config.get("host", "localhost"),
+            port=chroma_config.get("port", 8999),
             settings=Settings(
                 chroma_api_impl="rest",
                 allow_reset=True
             )
         )
         
+        # 获取集合名称
+        collection_name = chroma_config.get("collection_name", "prompts")
         # 获取或创建集合
-        self.collection = self.client.get_or_create_collection(name="prompts")
+        self.collection = self.client.get_or_create_collection(name=collection_name)
     
     def add_prompt_to_index(self, prompt: Prompt) -> None:
         """将Prompt添加到向量索引"""
@@ -95,8 +103,13 @@ class SearchService:
     
     def rebuild_index(self) -> None:
         """重建向量索引"""
-        # 清空集合
-        self.collection.delete()
+        # 获取Chroma配置
+        chroma_config = self.config_service.get_chroma_config()
+        collection_name = chroma_config.get("collection_name", "prompts")
+        
+        # 删除并重新创建集合
+        self.client.delete_collection(name=collection_name)
+        self.collection = self.client.get_or_create_collection(name=collection_name)
         
         # 获取所有Prompt
         db = next(get_db())
@@ -127,3 +140,10 @@ class SearchService:
                 metadatas=metadatas,
                 ids=ids
             )
+    
+    def get_config(self) -> Dict[str, Any]:
+        """获取搜索服务配置"""
+        return {
+            "chroma": self.config_service.get_chroma_config(),
+            "embedding": self.config_service.get_embedding_config()
+        }

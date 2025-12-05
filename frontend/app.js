@@ -5,9 +5,13 @@ function App() {
     const [selectedPrompt, setSelectedPrompt] = React.useState(null);
     const [versions, setVersions] = React.useState([]);
     const [tokens, setTokens] = React.useState([]);
+    const [llmConfigs, setLLMConfigs] = React.useState([]);
     const [searchQuery, setSearchQuery] = React.useState('');
     
-    const { message } = antd;
+    // 简单的消息提示函数
+    const showMessage = (type, content) => {
+        alert(content);
+    };
     
     // 获取所有Prompts
     const fetchPrompts = async () => {
@@ -16,7 +20,7 @@ function App() {
             setPrompts(data);
         } catch (error) {
             console.error('Failed to fetch prompts:', error);
-            message.error('获取Prompt列表失败');
+            showMessage('error', '获取Prompt列表失败');
         }
     };
     
@@ -27,7 +31,18 @@ function App() {
             setTokens(data);
         } catch (error) {
             console.error('Failed to fetch tokens:', error);
-            message.error('获取Token列表失败');
+            showMessage('error', '获取Token列表失败');
+        }
+    };
+    
+    // 获取所有LLM配置
+    const fetchLLMConfigs = async () => {
+        try {
+            const data = await API.LLMConfig.getAll();
+            setLLMConfigs(data);
+        } catch (error) {
+            console.error('Failed to fetch LLM configs:', error);
+            showMessage('error', '获取LLM配置列表失败');
         }
     };
     
@@ -35,6 +50,7 @@ function App() {
     React.useEffect(() => {
         fetchPrompts();
         fetchTokens();
+        fetchLLMConfigs();
     }, []);
     
     // 处理选择Prompt
@@ -46,14 +62,14 @@ function App() {
             setActiveTab('versions');
         } catch (error) {
             console.error('Failed to fetch versions:', error);
-            message.error('获取版本列表失败');
+            showMessage('error', '获取版本列表失败');
         }
     };
     
     // 处理编辑Prompt
     const handleEditPrompt = (prompt) => {
         // 这里可以实现编辑功能，或者跳转到编辑页面
-        message.info('编辑功能待实现');
+        showMessage('info', '编辑功能待实现');
     };
     
     // 处理删除Prompt
@@ -61,11 +77,11 @@ function App() {
         if (window.confirm('确定要删除这个Prompt吗？')) {
             try {
                 await API.Prompt.delete(promptId);
-                message.success('Prompt删除成功');
+                showMessage('success', 'Prompt删除成功');
                 fetchPrompts();
             } catch (error) {
                 console.error('Failed to delete prompt:', error);
-                message.error('删除Prompt失败');
+                showMessage('error', '删除Prompt失败');
             }
         }
     };
@@ -86,7 +102,7 @@ function App() {
             setPrompts(fullPrompts);
         } catch (error) {
             console.error('Failed to search prompts:', error);
-            message.error('搜索失败');
+            showMessage('error', '搜索失败');
         }
     };
     
@@ -114,6 +130,12 @@ function App() {
                     tokens: tokens,
                     onRefresh: fetchTokens
                 });
+            case 'llm-configs':
+                return React.createElement(LLMConfigPage, {
+                    llmConfigs: llmConfigs,
+                    tokens: tokens,
+                    onRefresh: fetchLLMConfigs
+                });
             default:
                 return React.createElement(HomePage, {
                     prompts: prompts,
@@ -140,7 +162,11 @@ function App() {
             React.createElement('div', {
                 className: `menu-item ${activeTab === 'tokens' ? 'active' : ''}`,
                 onClick: () => setActiveTab('tokens')
-            }, 'Token管理')
+            }, 'Token管理'),
+            React.createElement('div', {
+                className: `menu-item ${activeTab === 'llm-configs' ? 'active' : ''}`,
+                onClick: () => setActiveTab('llm-configs')
+            }, 'LLM配置')
         ),
         
         // 主内容区

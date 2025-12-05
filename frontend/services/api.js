@@ -226,10 +226,182 @@ const IndexAPI = {
     }
 };
 
+// LLM相关API
+const LLMAPI = {
+    // 生成文本补全
+    generate: async (prompt, modelParams = null) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/llm/generate/`, {
+                prompt,
+                model_params: modelParams
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to generate completion:', error);
+            throw error;
+        }
+    },
+    
+    // 生成单个文本嵌入
+    generateEmbedding: async (text) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/llm/embedding/`, {
+                text
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to generate embedding:', error);
+            throw error;
+        }
+    },
+    
+    // 批量生成文本嵌入
+    generateEmbeddingsBatch: async (texts) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/llm/embedding/batch/`, {
+                texts
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to generate embeddings batch:', error);
+            throw error;
+        }
+    }
+};
+
+// 配置相关API
+const ConfigAPI = {
+    // 获取所有配置
+    getAll: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/configs/`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch configs:', error);
+            throw error;
+        }
+    },
+    
+    // 获取LLM配置
+    getLLMConfig: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/configs/llm/`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch LLM config:', error);
+            throw error;
+        }
+    },
+    
+    // 获取embedding配置
+    getEmbeddingConfig: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/configs/embedding/`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch embedding config:', error);
+            throw error;
+        }
+    },
+    
+    // 更新配置
+    update: async (configData) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/configs/`, configData);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to update config:', error);
+            throw error;
+        }
+    },
+    
+    // 重新加载配置
+    reload: async () => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/configs/reload/`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to reload config:', error);
+            throw error;
+        }
+    }
+};
+
+// LLM配置相关API
+const LLMConfigAPI = {
+    // 获取所有LLM配置
+    getAll: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/llm-configs/`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch LLM configs:', error);
+            throw error;
+        }
+    },
+    
+    // 获取单个LLM配置
+    getById: async (id) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/llm-configs/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to fetch LLM config ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // 获取指定token的LLM配置
+    getByTokenId: async (tokenId) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/llm-configs/token/${tokenId}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to fetch LLM configs for token ${tokenId}:`, error);
+            throw error;
+        }
+    },
+    
+    // 创建LLM配置
+    create: async (configData) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/llm-configs/`, configData);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to create LLM config:', error);
+            throw error;
+        }
+    },
+    
+    // 更新LLM配置
+    update: async (id, configData) => {
+        try {
+            const response = await axios.put(`${API_BASE_URL}/llm-configs/${id}`, configData);
+            return response.data;
+        } catch (error) {
+            console.error(`Failed to update LLM config ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // 删除LLM配置
+    delete: async (id) => {
+        try {
+            await axios.delete(`${API_BASE_URL}/llm-configs/${id}`);
+        } catch (error) {
+            console.error(`Failed to delete LLM config ${id}:`, error);
+            throw error;
+        }
+    }
+};
+
 // 导出所有API服务
 window.API = {
     Prompt: PromptAPI,
     Version: VersionAPI,
     Token: TokenAPI,
-    Index: IndexAPI
+    Index: IndexAPI,
+    LLM: LLMAPI,
+    Config: ConfigAPI,
+    LLMConfig: LLMConfigAPI
 };

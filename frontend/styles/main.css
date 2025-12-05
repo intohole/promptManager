@@ -164,6 +164,370 @@ body {
     cursor: pointer;
 }
 
+/* 模态框样式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.close-btn:hover {
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px 20px;
+    border-top: 1px solid #f0f0f0;
+    gap: 10px;
+}
+
+/* 按钮组样式 */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* 搜索输入样式 */
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 300px;
+    margin-right: 10px;
+}
+
+/* 卡片标题样式 */
+.card-title {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-weight: bold;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Prompt网格样式 */
+.prompt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.prompt-card {
+    background-color: white;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    transition: all 0.3s;
+}
+
+.prompt-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.prompt-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.prompt-card-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.prompt-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.prompt-card-content p {
+    margin: 0 0 12px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* 标签样式 */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.tag {
+    background-color: #e6f7ff;
+    color: #1890ff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag-close {
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.tags-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* 版本对比样式 */
+.version-compare {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.version-compare select {
+    min-width: 200px;
+}
+
+.vs {
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+}
+
+/* 版本列表样式 */
+.version-list {
+    margin-top: 16px;
+}
+
+.version-item {
+    padding: 16px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: white;
+}
+
+.version-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.version-item-header h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.version-item-meta p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Token列表样式 */
+.token-list {
+    margin-top: 16px;
+}
+
+.token-item {
+    padding: 16px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: white;
+}
+
+.token-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.token-item-header h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.token-item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.token-item-meta p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 选择框样式 */
+.select {
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.select:focus {
+    outline: none;
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 表单样式增强 */
+.form {
+    margin: 0;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 复选框组样式 */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* 按钮变体 */
+.btn-small {
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+.btn-primary {
+    background-color: #1890ff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #40a9ff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .app-container {
@@ -193,5 +557,40 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+    
+    .header-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    
+    .header-buttons .btn {
+        margin-right: 0;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    
+    .search-input {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+    
+    .prompt-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .version-compare {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .version-compare select {
+        min-width: auto;
+    }
+    
+    .vs {
+        text-align: center;
     }
 }

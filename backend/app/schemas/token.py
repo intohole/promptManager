@@ -6,6 +6,8 @@ class TokenBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     value: str = Field(..., min_length=1)
     model_type: str = Field(..., min_length=1, max_length=100)
+    base_url: Optional[str] = Field(None)
+    thinking_mode: bool = False
     is_active: bool = True
 
 class TokenCreate(TokenBase):
@@ -15,6 +17,8 @@ class TokenUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=255)
     value: Optional[str] = Field(None, min_length=1)
     model_type: Optional[str] = Field(None, min_length=1, max_length=100)
+    base_url: Optional[str] = Field(None)
+    thinking_mode: Optional[bool] = None
     is_active: Optional[bool] = None
 
 class Token(TokenBase):

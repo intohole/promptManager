@@ -5,12 +5,10 @@ function VersionList({ prompt, versions, onBack }) {
     const [diffContent, setDiffContent] = React.useState('');
     const diffRef = React.useRef(null);
     
-    const { message } = antd;
-    
     // 处理查看差异
     const handleViewDiff = async () => {
         if (!selectedVersion1 || !selectedVersion2) {
-            message.warning('请选择两个版本进行对比');
+            alert('请选择两个版本进行对比');
             return;
         }
         
@@ -18,81 +16,83 @@ function VersionList({ prompt, versions, onBack }) {
             const response = await API.Version.getDiff(prompt.id, selectedVersion1, selectedVersion2);
             setDiffContent(response.diff);
             
-            // 使用CodeMirror展示差异
+            // 使用HTML展示差异
             setTimeout(() => {
                 if (diffRef.current) {
-                    // 简单的HTML差异展示
                     diffRef.current.innerHTML = response.diff;
                 }
             }, 0);
         } catch (error) {
             console.error('Failed to get diff:', error);
-            message.error('获取差异失败');
+            alert('获取差异失败: ' + error.message);
         }
     };
     
     if (!prompt) {
         return React.createElement('div', null,
-            React.createElement(antd.Button, { onClick: onBack }, '返回'),
+            React.createElement('button', { className: 'btn', onClick: onBack }, '返回'),
             React.createElement('h2', null, '请先选择一个Prompt')
         );
     }
     
     return React.createElement('div', null,
         React.createElement('div', { className: 'header' },
-            React.createElement(antd.Space, null,
-                React.createElement(antd.Button, { onClick: onBack }, '返回'),
-                React.createElement('h2', null, `${prompt.name} - 版本管理`)
-            )
+            React.createElement('button', { className: 'btn', onClick: onBack }, '返回'),
+            React.createElement('h2', null, `${prompt.name} - 版本管理`)
         ),
         
-        React.createElement(antd.Card, { title: '版本对比', style: { marginBottom: 20 } },
-            React.createElement(antd.Space, null,
-                React.createElement(antd.Select, {
+        React.createElement('div', { className: 'card' },
+            React.createElement('h3', { className: 'card-title' }, '版本对比'),
+            React.createElement('div', { className: 'version-compare' },
+                React.createElement('select', {
                     placeholder: '选择版本1',
-                    style: { width: 200 },
-                    onChange: setSelectedVersion1
+                    className: 'select',
+                    value: selectedVersion1 || '',
+                    onChange: (e) => setSelectedVersion1(parseInt(e.target.value))
                 },
-                    versions.map(version => React.createElement(antd.Select.Option, {
+                    React.createElement('option', { value: '', disabled: true }, '选择版本1'),
+                    versions.map(version => React.createElement('option', {
                         key: version.version_number,
                         value: version.version_number
                     },
                         `版本 ${version.version_number} (${new Date(version.created_at).toLocaleString()})`
                     ))
                 ),
-                React.createElement('span', null, 'vs'),
-                React.createElement(antd.Select, {
+                React.createElement('span', { className: 'vs' }, 'vs'),
+                React.createElement('select', {
                     placeholder: '选择版本2',
-                    style: { width: 200 },
-                    onChange: setSelectedVersion2
+                    className: 'select',
+                    value: selectedVersion2 || '',
+                    onChange: (e) => setSelectedVersion2(parseInt(e.target.value))
                 },
-                    versions.map(version => React.createElement(antd.Select.Option, {
+                    React.createElement('option', { value: '', disabled: true }, '选择版本2'),
+                    versions.map(version => React.createElement('option', {
                         key: version.version_number,
                         value: version.version_number
                     },
                         `版本 ${version.version_number} (${new Date(version.created_at).toLocaleString()})`
                     ))
                 ),
-                React.createElement(antd.Button, {
-                    type: 'primary',
+                React.createElement('button', {
+                    className: 'btn btn-primary',
                     onClick: handleViewDiff
                 }, '查看差异')
             ),
             
             diffContent && React.createElement('div', {
                 className: 'diff-container',
-                ref: diffRef,
-                style: { marginTop: 20 }
+                ref: diffRef
             })
         ),
         
-        React.createElement(antd.Card, { title: '版本列表' },
-            React.createElement(antd.List, {
-                dataSource: versions,
-                renderItem: (version) => React.createElement(antd.List.Item, {
-                    actions: [
-                        React.createElement(antd.Button, {
-                            size: 'small',
+        React.createElement('div', { className: 'card' },
+            React.createElement('h3', { className: 'card-title' }, '版本列表'),
+            React.createElement('div', { className: 'version-list' },
+                versions.map(version => React.createElement('div', { key: version.id, className: 'version-item' },
+                    React.createElement('div', { className: 'version-item-header' },
+                        React.createElement('h4', null, `版本 ${version.version_number}`),
+                        React.createElement('button', {
+                            className: 'btn btn-small',
                             onClick: () => {
                                 if (!selectedVersion1) {
                                     setSelectedVersion1(version.version_number);
@@ -101,18 +101,14 @@ function VersionList({ prompt, versions, onBack }) {
                                 }
                             }
                         }, '选择对比')
-                    ]
-                },
-                    React.createElement(antd.List.Item.Meta, {
-                        title: `版本 ${version.version_number}`,
-                        description: React.createElement('div', null,
-                            React.createElement('p', null, `创建时间: ${new Date(version.created_at).toLocaleString()}`),
-                            React.createElement('p', null, `创建人: ${version.created_by}`),
-                            React.createElement('p', null, `备注: ${version.comment || '无'}`)
-                        )
-                    })
-                )
-            })
+                    ),
+                    React.createElement('div', { className: 'version-item-meta' },
+                        React.createElement('p', null, `创建时间: ${new Date(version.created_at).toLocaleString()}`),
+                        React.createElement('p', null, `创建人: ${version.created_by}`),
+                        React.createElement('p', null, `备注: ${version.comment || '无'}`)
+                    )
+                ))
+            )
         )
     );
 }
