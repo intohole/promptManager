@@ -1,42 +1,36 @@
 from openai import OpenAI
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from .config_service import ConfigService
 
 class LLMService:
     def __init__(self):
         self.config_service = ConfigService()
-        self.llm_client = None
-        self.embedding_client = None
-        
-        try:
-            self.llm_client = self._create_llm_client()
-        except Exception as e:
-            print(f"Warning: Failed to initialize LLM client: {e}")
-        
-        try:
-            self.embedding_client = self._create_embedding_client()
-        except Exception as e:
-            print(f"Warning: Failed to initialize embedding client: {e}")
+        # 移除全局客户端初始化，改为按需创建
+        pass
     
-    def _create_llm_client(self) -> OpenAI:
+    def _create_llm_client(self, llm_config: Optional[Dict[str, Any]] = None) -> OpenAI:
         """创建LLM客户端"""
-        llm_config = self.config_service.get_llm_config()
+        if llm_config is None:
+            llm_config = self.config_service.get_llm_config()
         return OpenAI(
             api_key=llm_config["api_key"],
             base_url=llm_config["base_url"]
         )
     
-    def _create_embedding_client(self) -> OpenAI:
+    def _create_embedding_client(self, embedding_config: Optional[Dict[str, Any]] = None) -> OpenAI:
         """创建嵌入服务客户端"""
-        embedding_config = self.config_service.get_embedding_config()
+        if embedding_config is None:
+            embedding_config = self.config_service.get_embedding_config()
         return OpenAI(
             api_key=embedding_config["api_key"],
             base_url=embedding_config["base_url"]
         )
     
-    def generate_completion(self, prompt: str, **kwargs) -> str:
+    def generate_completion(self, prompt: str, llm_config: Optional[Dict[str, Any]] = None, **kwargs) -> str:
         """生成文本补全"""
-        llm_config = self.config_service.get_llm_config()
+        # 如果提供了外部配置，使用外部配置；否则使用默认配置
+        if llm_config is None:
+            llm_config = self.config_service.get_llm_config()
         
         # 合并配置参数和传入参数
         params = {
@@ -47,7 +41,9 @@ class LLMService:
         }
         
         try:
-            response = self.llm_client.chat.completions.create(
+            # 总是按需创建客户端，不再使用全局客户端
+            llm_client = self._create_llm_client(llm_config)
+            response = llm_client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt}],
                 **params
             )
@@ -56,16 +52,21 @@ class LLMService:
             print(f"Failed to generate completion: {e}")
             raise
     
-    def generate_embedding(self, text: str) -> List[float]:
+    def generate_embedding(self, text: str, embedding_config: Optional[Dict[str, Any]] = None) -> List[float]:
         """生成文本嵌入"""
-        embedding_config = self.config_service.get_embedding_config()
+        # 如果提供了外部配置，使用外部配置；否则使用默认配置
+        if embedding_config is None:
+            embedding_config = self.config_service.get_embedding_config()
         
         try:
-            response = self.embedding_client.embeddings.create(
+            # 总是按需创建客户端，不再使用全局客户端
+            embedding_client = self._create_embedding_client(embedding_config)
+            response = embedding_client.embeddings.create(
                 model=embedding_config["model"],
                 input=text,
                 encoding_format="float"
             )
+            
             embedding = response.data[0].embedding
             
             # 如果需要归一化向量
@@ -84,12 +85,16 @@ class LLMService:
         """获取LLM配置"""
         return self.config_service.get_llm_config()
     
-    def generate_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
+    def generate_embeddings_batch(self, texts: List[str], embedding_config: Optional[Dict[str, Any]] = None) -> List[List[float]]:
         """批量生成文本嵌入"""
-        embedding_config = self.config_service.get_embedding_config()
+        # 如果提供了外部配置，使用外部配置；否则使用默认配置
+        if embedding_config is None:
+            embedding_config = self.config_service.get_embedding_config()
         
         try:
-            response = self.embedding_client.embeddings.create(
+            # 总是按需创建客户端，不再使用全局客户端
+            embedding_client = self._create_embedding_client(embedding_config)
+            response = embedding_client.embeddings.create(
                 model=embedding_config["model"],
                 input=texts,
                 encoding_format="float"
@@ -120,5 +125,3 @@ class LLMService:
     def reload_config(self) -> None:
         """重新加载配置"""
         self.config_service.reload_config()
-        self.llm_client = self._create_llm_client()
-        self.embedding_client = self._create_embedding_client()

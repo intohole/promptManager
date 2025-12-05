@@ -17,6 +17,7 @@ class LLMConfigUpdate(BaseModel):
     model_name: Optional[str] = Field(None, min_length=1, max_length=255)
     params: Optional[Dict[str, Any]] = None
     is_active: Optional[bool] = None
+    token_id: Optional[int] = Field(None, ge=1)
 
 class LLMConfig(LLMConfigBase):
     id: int
