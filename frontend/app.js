@@ -150,7 +150,7 @@ function App() {
                     onRefresh: fetchLLMConfigs
                 });
             case 'embedding-configs':
-                return React.createElement(EmbeddingConfigList, {
+                return React.createElement(EmbeddingConfigPage, {
                     embeddingConfigs: embeddingConfigs,
                     tokens: tokens,
                     onRefresh: fetchEmbeddingConfigs

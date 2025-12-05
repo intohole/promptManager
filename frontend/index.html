@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prompt Manager</title>
     <!-- 引入React和ReactDOM -->
-    <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://cdn.bootcdn.net/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://cdn.bootcdn.net/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
     <!-- 引入Babel用于JSX转换 -->
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.25.8/babel.min.js"></script>
     <!-- 引入Axios用于API请求 -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.7/axios.min.js"></script>
     <!-- 移除Ant Design依赖，使用原生CSS -->
     <!-- 引入CodeMirror用于代码编辑和diff展示 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/monokai.css">
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/markdown/markdown.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/merge/merge.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/merge/merge.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/codemirror/5.65.16/codemirror.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/codemirror/5.65.16/theme/monokai.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.65.16/codemirror.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.65.16/addon/merge/merge.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/codemirror/5.65.16/addon/merge/merge.css">
     
     <!-- 引入自定义样式 -->
     <link rel="stylesheet" href="styles/main.css">
@@ -32,10 +32,12 @@
     <script type="text/babel" src="components/VersionList.js"></script>
     <script type="text/babel" src="components/TokenList.js"></script>
     <script type="text/babel" src="components/LLMConfigList.js"></script>
+    <script type="text/babel" src="components/EmbeddingConfigList.js"></script>
     <script type="text/babel" src="pages/HomePage.js"></script>
     <script type="text/babel" src="pages/VersionPage.js"></script>
     <script type="text/babel" src="pages/TokenPage.js"></script>
     <script type="text/babel" src="pages/LLMConfigPage.js"></script>
+    <script type="text/babel" src="pages/EmbeddingConfigPage.js"></script>
     <script type="text/babel" src="app.js"></script>
 </body>
 </html>
