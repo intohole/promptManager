@@ -5,7 +5,7 @@ from ..database.config import get_db
 from ..schemas import LLMConfig, LLMConfigCreate, LLMConfigUpdate
 from ..models import LLMConfig as LLMConfigModel
 
-router = APIRouter(prefix="/llm/configs", tags=["llm_configs"])
+router = APIRouter(prefix="/llm-configs", tags=["llm_configs"])
 
 @router.post("/", response_model=LLMConfig)
 def create_llm_config(llm_config: LLMConfigCreate, db: Session = Depends(get_db)):
