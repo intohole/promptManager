@@ -12,12 +12,12 @@ class SearchService:
         # 获取Chroma配置
         chroma_config = self.config_service.get_chroma_config()
         
-        # 连接到ChromaDB服务
-        self.client = chromadb.HttpClient(
-            host=chroma_config.get("host", "localhost"),
-            port=chroma_config.get("port", 8999),
-            settings=Settings(
+        # 连接到ChromaDB服务（兼容chromadb 0.4.17版本）
+        self.client = chromadb.Client(
+            chromadb.config.Settings(
                 chroma_api_impl="rest",
+                chroma_server_host=chroma_config.get("host", "localhost"),
+                chroma_server_http_port=chroma_config.get("port", 8999),
                 allow_reset=True
             )
         )

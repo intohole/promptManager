@@ -6,6 +6,7 @@ function App() {
     const [versions, setVersions] = React.useState([]);
     const [tokens, setTokens] = React.useState([]);
     const [llmConfigs, setLLMConfigs] = React.useState([]);
+    const [embeddingConfigs, setEmbeddingConfigs] = React.useState([]);
     const [searchQuery, setSearchQuery] = React.useState('');
     
     // 简单的消息提示函数
@@ -46,11 +47,23 @@ function App() {
         }
     };
     
+    // 获取所有Embedding配置
+    const fetchEmbeddingConfigs = async () => {
+        try {
+            const data = await API.EmbeddingConfig.getAll();
+            setEmbeddingConfigs(data);
+        } catch (error) {
+            console.error('Failed to fetch Embedding configs:', error);
+            showMessage('error', '获取Embedding配置列表失败');
+        }
+    };
+    
     // 初始化数据
     React.useEffect(() => {
         fetchPrompts();
         fetchTokens();
         fetchLLMConfigs();
+        fetchEmbeddingConfigs();
     }, []);
     
     // 处理选择Prompt
@@ -136,6 +149,12 @@ function App() {
                     tokens: tokens,
                     onRefresh: fetchLLMConfigs
                 });
+            case 'embedding-configs':
+                return React.createElement(EmbeddingConfigList, {
+                    embeddingConfigs: embeddingConfigs,
+                    tokens: tokens,
+                    onRefresh: fetchEmbeddingConfigs
+                });
             default:
                 return React.createElement(HomePage, {
                     prompts: prompts,
@@ -166,7 +185,11 @@ function App() {
             React.createElement('div', {
                 className: `menu-item ${activeTab === 'llm-configs' ? 'active' : ''}`,
                 onClick: () => setActiveTab('llm-configs')
-            }, 'LLM配置')
+            }, 'LLM配置'),
+            React.createElement('div', {
+                className: `menu-item ${activeTab === 'embedding-configs' ? 'active' : ''}`,
+                onClick: () => setActiveTab('embedding-configs')
+            }, 'Embedding配置')
         ),
         
         // 主内容区

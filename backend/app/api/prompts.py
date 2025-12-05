@@ -3,10 +3,11 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from ..database.config import get_db
 from ..schemas import Prompt, PromptCreate, PromptUpdate
-from ..services import PromptService, SearchService
+from ..services import PromptService
+# from ..services import SearchService  # 暂时注释，待解决chromadb连接问题
 
 router = APIRouter(prefix="/prompts", tags=["prompts"])
-search_service = SearchService()
+# search_service = SearchService()  # 暂时注释，待解决chromadb连接问题
 
 @router.post("/", response_model=Prompt)
 def create_prompt(prompt: PromptCreate, db: Session = Depends(get_db)):
@@ -15,7 +16,7 @@ def create_prompt(prompt: PromptCreate, db: Session = Depends(get_db)):
     db_prompt = prompt_service.create_prompt(prompt)
     
     # 添加到搜索索引
-    search_service.add_prompt_to_index(db_prompt)
+    # search_service.add_prompt_to_index(db_prompt)  # 暂时注释，待解决chromadb连接问题
     
     return db_prompt
 
@@ -43,7 +44,7 @@ def update_prompt(prompt_id: int, prompt_update: PromptUpdate, db: Session = Dep
         raise HTTPException(status_code=404, detail="Prompt not found")
     
     # 更新搜索索引
-    search_service.update_prompt_in_index(db_prompt)
+    # search_service.update_prompt_in_index(db_prompt)  # 暂时注释，待解决chromadb连接问题
     
     return db_prompt
 
@@ -56,11 +57,12 @@ def delete_prompt(prompt_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Prompt not found")
     
     # 从搜索索引中删除
-    search_service.delete_prompt_from_index(prompt_id)
+    # search_service.delete_prompt_from_index(prompt_id)  # 暂时注释，待解决chromadb连接问题
     
     return {"message": "Prompt deleted successfully"}
 
-@router.get("/search/{query}")
+# @router.get("/search/{query}")
 def search_prompts(query: str, n_results: int = 10, category: Optional[str] = None):
     """搜索Prompt"""
-    return search_service.search_prompts(query, n_results=n_results, category=category)
+    # return search_service.search_prompts(query, n_results=n_results, category=category)  # 暂时注释，待解决chromadb连接问题
+    return {"results": [], "message": "Search functionality is temporarily disabled"}

@@ -225,60 +225,6 @@ function PromptList({
                                     ))
                                 )
                             )
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'edit-prompt-model-params' }, '模型参数 (JSON格式)'),
-                            React.createElement('textarea', {
-                                type: 'text',
-                                id: 'edit-prompt-model-params',
-                                value: JSON.stringify(formData.model_params, null, 2),
-                                onChange: (e) => {
-                                    try {
-                                        setFormData({ ...formData, model_params: JSON.parse(e.target.value) });
-                                    } catch (error) {
-                                        // 忽略无效JSON，等待用户输入正确格式
-                                    }
-                                },
-                                placeholder: '{"temperature": 0.1, "max_tokens": 2048}',
-                                className: 'form-textarea',
-                                rows: 4
-                            })
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'edit-prompt-model-params' }, '模型参数 (JSON格式)'),
-                            React.createElement('textarea', {
-                                type: 'text',
-                                id: 'edit-prompt-model-params',
-                                value: JSON.stringify(formData.model_params, null, 2),
-                                onChange: (e) => {
-                                    try {
-                                        setFormData({ ...formData, model_params: JSON.parse(e.target.value) });
-                                    } catch (error) {
-                                        // 忽略无效JSON，等待用户输入正确格式
-                                    }
-                                },
-                                placeholder: '{"temperature": 0.1, "max_tokens": 2048}',
-                                className: 'form-textarea',
-                                rows: 4
-                            })
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'prompt-model-params' }, '模型参数 (JSON格式)'),
-                            React.createElement('textarea', {
-                                type: 'text',
-                                id: 'prompt-model-params',
-                                value: JSON.stringify(formData.model_params, null, 2),
-                                onChange: (e) => {
-                                    try {
-                                        setFormData({ ...formData, model_params: JSON.parse(e.target.value) });
-                                    } catch (error) {
-                                        // 忽略无效JSON，等待用户输入正确格式
-                                    }
-                                },
-                                placeholder: '{"temperature": 0.1, "max_tokens": 2048}',
-                                className: 'form-textarea',
-                                rows: 4
-                            })
                         )
                     )
                 ),
@@ -372,24 +318,6 @@ function PromptList({
                                     ))
                                 )
                             )
-                        ),
-                        React.createElement('div', { className: 'form-group' },
-                            React.createElement('label', { htmlFor: 'edit-prompt-model-params' }, '模型参数 (JSON格式)'),
-                            React.createElement('textarea', {
-                                type: 'text',
-                                id: 'edit-prompt-model-params',
-                                value: JSON.stringify(formData.model_params, null, 2),
-                                onChange: (e) => {
-                                    try {
-                                        setFormData({ ...formData, model_params: JSON.parse(e.target.value) });
-                                    } catch (error) {
-                                        // 忽略无效JSON，等待用户输入正确格式
-                                    }
-                                },
-                                placeholder: '{"temperature": 0.1, "max_tokens": 2048}',
-                                className: 'form-textarea',
-                                rows: 4
-                            })
                         )
                     )
                 ),
