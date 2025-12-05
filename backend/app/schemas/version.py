@@ -4,7 +4,6 @@ from datetime import datetime
 
 class VersionBase(BaseModel):
     content: str = Field(..., min_length=1)
-    model_params: Optional[Dict[str, Any]] = None
     comment: Optional[str] = Field(None, max_length=1000)
     created_by: Optional[str] = Field(None, max_length=100)
 

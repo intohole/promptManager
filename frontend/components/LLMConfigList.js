@@ -4,9 +4,9 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
     const [modalType, setModalType] = React.useState('create'); // create, edit
     const [formData, setFormData] = React.useState({
         name: '',
-        token_id: '',
+        token_id: null,
         model_name: '',
-        params: {},
+        params: { temperature: 0.1, max_tokens: 2048, top_p: 0.9, presence_penalty: 0.0, frequency_penalty: 0.0 },
         is_active: true
     });
     
@@ -70,9 +70,9 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
         setModalType('create');
         setFormData({
             name: '',
-            token_id: '',
+            token_id: null,
             model_name: '',
-            params: {},
+            params: { temperature: 0.1, max_tokens: 2048, top_p: 0.9, presence_penalty: 0.0, frequency_penalty: 0.0 },
             is_active: true
         });
         setIsModalVisible(true);
@@ -150,8 +150,8 @@ function LLMConfigList({ llmConfigs, tokens, onRefresh }) {
                             React.createElement('label', { htmlFor: 'llm-config-token' }, '关联Token*'),
                             React.createElement('select', {
                                 id: 'llm-config-token',
-                                value: formData.token_id,
-                                onChange: (e) => setFormData({ ...formData, token_id: parseInt(e.target.value) }),
+                                value: formData.token_id || '',
+                                onChange: (e) => setFormData({ ...formData, token_id: e.target.value ? parseInt(e.target.value) : null }),
                                 className: 'form-input'
                             },
                                 React.createElement('option', { value: '' }, '请选择Token'),

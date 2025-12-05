@@ -19,7 +19,6 @@ class PromptService:
         # 创建初始版本
         version_create = VersionCreate(
             content=prompt.content,
-            model_params=prompt.model_params,
             comment="Initial version",
             created_by="system"
         )
@@ -49,21 +48,16 @@ class PromptService:
         if not update_data:
             return db_prompt
         
-        # 检查内容或模型参数是否变化
+        # 检查内容是否变化
         content_changed = False
-        params_changed = False
         
         if "content" in update_data:
             content_changed = db_prompt.content != update_data["content"]
         
-        if "model_params" in update_data:
-            params_changed = db_prompt.model_params != update_data["model_params"]
-        
-        # 只有当内容或模型参数变化时才创建新版本
-        if content_changed or params_changed:
+        # 只有当内容变化时才创建新版本
+        if content_changed:
             # 准备新版本数据
             version_content = update_data.get("content", db_prompt.content)
-            version_params = update_data.get("model_params", db_prompt.model_params)
             
             # 生成差异摘要
             diffs = self.dmp.diff_main(db_prompt.content, version_content)
@@ -73,7 +67,6 @@ class PromptService:
             # 创建新版本
             version_create = VersionCreate(
                 content=version_content,
-                model_params=version_params,
                 comment="Auto-save on update",
                 created_by="system"
             )
@@ -106,7 +99,6 @@ class PromptService:
             prompt_id=prompt_id,
             version_number=max_version + 1,
             content=version_create.content,
-            model_params=version_create.model_params,
             diff_summary=diff_summary,
             created_by=version_create.created_by or "system",
             comment=version_create.comment

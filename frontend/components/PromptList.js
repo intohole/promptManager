@@ -78,10 +78,7 @@ function PromptList({
     // 处理保存编辑
     const handleSaveEdit = async () => {
         try {
-            await API.Prompt.update(formData.id, {
-                ...formData,
-                model_params: formData.model_params || {}
-            });
+            await API.Prompt.update(formData.id, formData);
             alert('Prompt更新成功');
             setIsEditModalVisible(false);
             // 刷新页面或通知父组件刷新

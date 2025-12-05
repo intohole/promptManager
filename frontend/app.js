@@ -155,6 +155,17 @@ function App() {
                     tokens: tokens,
                     onRefresh: fetchEmbeddingConfigs
                 });
+            case 'llm-test':
+                return React.createElement(LLMTestPage, {
+                    prompts: prompts,
+                    llmConfigs: llmConfigs,
+                    tokens: tokens
+                });
+            case 'embedding-test':
+                return React.createElement(EmbeddingTestPage, {
+                    embeddingConfigs: embeddingConfigs,
+                    tokens: tokens
+                });
             default:
                 return React.createElement(HomePage, {
                     prompts: prompts,
@@ -189,7 +200,15 @@ function App() {
             React.createElement('div', {
                 className: `menu-item ${activeTab === 'embedding-configs' ? 'active' : ''}`,
                 onClick: () => setActiveTab('embedding-configs')
-            }, 'Embedding配置')
+            }, 'Embedding配置'),
+            React.createElement('div', {
+                className: `menu-item ${activeTab === 'llm-test' ? 'active' : ''}`,
+                onClick: () => setActiveTab('llm-test')
+            }, 'LLM测试'),
+            React.createElement('div', {
+                className: `menu-item ${activeTab === 'embedding-test' ? 'active' : ''}`,
+                onClick: () => setActiveTab('embedding-test')
+            }, 'Embedding测试')
         ),
         
         // 主内容区

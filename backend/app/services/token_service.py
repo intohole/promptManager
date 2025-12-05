@@ -27,6 +27,8 @@ class TokenService:
             name=token_create.name,
             value=hashed_value,
             model_type=token_create.model_type,
+            base_url=token_create.base_url,
+            thinking_mode=token_create.thinking_mode,
             is_active=token_create.is_active
         )
         

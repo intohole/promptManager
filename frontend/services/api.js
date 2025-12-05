@@ -266,6 +266,34 @@ const LLMAPI = {
             console.error('Failed to generate embeddings batch:', error);
             throw error;
         }
+    },
+    
+    // 测试prompt+token+llm配置
+    testGenerate: async (prompt, llmConfigId) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/llm/test/generate/`, {
+                prompt,
+                llm_config_id: llmConfigId
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to test generate:', error);
+            throw error;
+        }
+    },
+    
+    // 测试embedding配置
+    testEmbedding: async (text, embeddingConfigId) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/llm/test/embedding/`, {
+                text,
+                embedding_config_id: embeddingConfigId
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to test embedding:', error);
+            throw error;
+        }
     }
 };
 

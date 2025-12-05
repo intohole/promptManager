@@ -5,7 +5,7 @@ function TokenList({ tokens, onRefresh }) {
     const [formData, setFormData] = React.useState({
         name: '',
         value: '',
-        model_type: '',
+        model_type: 'openai',
         base_url: '',
         thinking_mode: false,
         is_active: true
@@ -64,7 +64,7 @@ function TokenList({ tokens, onRefresh }) {
         setFormData({
             name: '',
             value: '',
-            model_type: '',
+            model_type: 'openai',
             base_url: '',
             thinking_mode: false,
             is_active: true

@@ -4,9 +4,12 @@ function EmbeddingConfigList({ embeddingConfigs, tokens, onRefresh }) {
     const [modalType, setModalType] = React.useState('create'); // create, edit
     const [formData, setFormData] = React.useState({
         name: '',
-        token_id: '',
+        token_id: null,
         model_name: '',
-        params: {},
+        params: {
+            dimensions: 1536,
+            normalize: false
+        },
         is_active: true
     });
     
@@ -150,8 +153,8 @@ function EmbeddingConfigList({ embeddingConfigs, tokens, onRefresh }) {
                             React.createElement('label', { htmlFor: 'embedding-config-token' }, '关联Token*'),
                             React.createElement('select', {
                                 id: 'embedding-config-token',
-                                value: formData.token_id,
-                                onChange: (e) => setFormData({ ...formData, token_id: parseInt(e.target.value) }),
+                                value: formData.token_id || '',
+                                onChange: (e) => setFormData({ ...formData, token_id: e.target.value ? parseInt(e.target.value) : null }),
                                 className: 'form-input'
                             },
                                 React.createElement('option', { value: '' }, '请选择Token'),
